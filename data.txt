@@ -1,0 +1,73 @@
+#list (player list)
+[{"name":"Big Black Chicken","identifier":"steam:110000107c9292c","job":{"name":"police","grade_label":"Giám đốc công an","grade":99,"grade_name":"boss","label":"Công An"}},{"name":"IluvNoobs","identifier":"steam:11000010b107276","job":{"name":"police","grade_label":"Thượng sĩ","grade":3,"grade_name":"lieutenant","label":"Công An"}},{"name":"SWAT | Phi","identifier":"Char1:1100001432240e1","job":{"name":"police","grade_label":"Thượng sĩ","grade":3,"grade_name":"lieutenant","label":"Công An"}},{"name":"a","identifier":"steam:11000010545a672","job":{"name":"police","grade_label":"Trung sĩ","grade":2,"grade_name":"sergeant","label":"Công An"}},{"name":"Fujin","identifier":"steam:110000134ee0f87","job":{"name":"police","grade_label":"Học việc","grade":0,"grade_name":"recruit","label":"Công An"}},{"name":"Ecion","identifier":"steam:11000010c5463be","job":{"name":"police","grade_label":"Học việc","grade":0,"grade_name":"recruit","label":"Công An"}},{"name":"Tharo","identifier":"steam:110000134ca0d80","job":{"name":"police","grade_label":"Học việc","grade":0,"grade_name":"recruit","label":"Công An"}}]
+#total
+10
+#ganginfo
+{"name":"police","grades":{"0":{"label":"Học việc","manage":0,"invite":0,"skin_male":"{}","kick":0,"name":"recruit","skin_female":"{}","job_name":"police","salary":2500,"id":13,"grade":0},"3":{"label":"Thượng sĩ","manage":0,"invite":0,"skin_male":"{}","kick":0,"name":"lieutenant","skin_female":"{}","job_name":"police","salary":17000,"id":16,"grade":3},"2":{"label":"Trung sĩ","manage":0,"invite":0,"skin_male":"{}","kick":0,"name":"sergeant","skin_female":"{}","job_name":"police","salary":13000,"id":15,"grade":2},"1":{"label":"Hạ sĩ","manage":0,"invite":0,"skin_male":"{}","kick":0,"name":"officer","skin_female":"{}","job_name":"police","salary":7000,"id":14,"grade":1},"99":{"label":"Giám đốc công an","manage":1,"invite":1,"skin_male":"{}","kick":1,"name":"boss","skin_female":"{}","job_name":"police","salary":22000,"id":17,"grade":99}},"whitelisted":true,"id":10,"label":"Công An"}
+#myrank
+99
+#society_money
+10000
+#player_money
+1000
+
+#setup UI (input)
+SendNUIMessage({type="loadata",list, total, ganginfo, myrank, society_money, player_money})
+
+
+
+#createrank (output)
+rankgrade #number
+rankname #string
+ranklabel #string
+salary #number
+kick #boolean
+invite #boolean
+manage #boolean
+society #string
+
+#editrank (output)
+rankgrade #number
+rankname #string
+ranklabel #string
+salary #number
+kick #boolean
+invite #boolean
+manage #boolean
+society #string
+
+#deleterank (output)
+grade #number
+society #string
+
+
+
+
+
+#editplayer (output)
+society #string
+cid #string
+grade #string
+
+#kick (output)
+society #string
+cid #string
+
+#invite (output)
+society #string
+cid #string
+
+#getclosestplayer (cb)
+name #string
+id #number
+
+#deposit (output)
+society #string
+inputmoney #number
+
+#withdraw (output)
+society #string
+inputmoney #number
+
+#refresh (output)
+society #string

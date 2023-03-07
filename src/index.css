@@ -1,0 +1,235 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+.container {
+  display: none;
+}
+.quest-table {
+  background-color: rgb(46, 46, 46, 0.45);
+  padding-left: 0px;
+  padding-right: 0px;
+  border-radius: 25px;
+  width: 900px;
+}
+.quest-header {
+  width: 100%;
+  background-color: rgb(46, 46, 46, 1);
+  color: white;
+  font-weight: 500;
+  font-size: 20px;
+  border-top-right-radius: 25px;
+  border-top-left-radius: 25px;
+}
+.quest-body {
+  min-height: 400px;
+  max-height: 600px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+}
+.side-bar {
+  background-color: rgb(46, 46, 46, 0.85);
+  min-height: 400px;
+  max-height: 100%;
+  border-bottom-left-radius: 25px;
+}
+.quest-body2 {
+  overflow-y: scroll;
+  overflow-x: none;
+  min-height: 400px;
+  max-height: 600px;
+}
+.quest-container {
+  background-color: #151515eb;
+  border-radius: 25px;
+  margin-top: 30px !important;
+}
+.container-header {
+  color: white;
+  font-weight: 500;
+  font-size: 20px;
+}
+.body-info {
+  color: white;
+}
+.plate {
+  color: #00abff;
+}
+.state {
+  color: #00ff00;
+}
+.offstate {
+  color: red;
+}
+.rename {
+  margin-top: 3px;
+  height: 40px;
+  float: right;
+  border-radius: 25px;
+}
+.action {
+  border-radius: 25px;
+}
+.trunk {
+  color: #00abff;
+}
+
+.profile-card__img {
+  width: 75px;
+  height: 75px;
+  margin-left: auto;
+  margin-right: auto;
+  transform: translateY(-35%);
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  z-index: 4;
+  background-color: #151515eb;
+  box-shadow: 0px 5px 50px 0px #8cffa0, 0px 0px 0px 7px rgba(21, 255, 0, 0.5);
+}
+@media screen and (max-width: 576px) {
+  .profile-card__img {
+    width: 120px;
+    height: 120px;
+  }
+}
+.profile-card__img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+a {
+  color: white;
+  font-weight: 600;
+}
+a:hover {
+  color: #c3c3c3;
+}
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  border-radius: 25px;
+  background-color: green !important;
+}
+.bg-dark {
+  border-radius: 5px;
+  background-color: #1e1e1e !important;
+}
+.cancel-radius {
+  border-radius: 5px;
+}
+
+@-webkit-keyframes Gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@-moz-keyframes Gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes Gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+.profile-card__img {
+  background: linear-gradient(
+    -45deg,
+    rgb(243, 64, 64),
+    rgb(228, 61, 195),
+    rgb(76, 97, 243),
+    rgb(71, 243, 225),
+    rgb(71, 243, 132),
+    rgb(182, 243, 71),
+    rgb(243, 158, 71)
+  );
+  background-size: 400% 400%;
+  -webkit-animation: Gradient 5s ease infinite;
+  -moz-animation: Gradient 5s ease infinite;
+  animation: Gradient 5s ease infinite;
+}
+
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+  color: #43ff7d;
+  border-bottom: 2px solid #00ff10;
+  background-color: #ffffff00;
+  border-color: #ffffff00 #ffffff00 #3aff7d #ffffff00;
+}
+.nav-tabs {
+  border-bottom: none;
+}
+.searchbar {
+  margin-bottom: auto;
+  margin-top: auto;
+  height: 60px;
+  background-color: #2e2e2e;
+  border-radius: 30px;
+  padding: 10px;
+}
+
+.search_input {
+  color: white;
+  border: 0;
+  outline: 0;
+  background: none;
+  width: 0;
+  caret-color: transparent;
+  line-height: 40px;
+  transition: width 0.4s linear;
+}
+
+.searchbar:hover > .search_input {
+  padding: 0 10px;
+  width: 450px;
+  caret-color: red;
+  transition: width 0.4s linear;
+}
+
+.searchbar:hover > .search_icon {
+  background: white;
+  color: #e74c3c;
+}
+
+.search_icon {
+  height: 40px;
+  width: 40px;
+  float: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: white;
+  text-decoration: none;
+}
