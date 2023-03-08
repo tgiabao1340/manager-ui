@@ -56,7 +56,7 @@ export default function BasicTable({ data }) {
 
         return (
           <Button
-            variant="outlined"
+            variant="contained"
             color="warning"
             size="small"
             onClick={onClick}
@@ -80,7 +80,7 @@ export default function BasicTable({ data }) {
 
         return (
           <Button
-            variant="outlined"
+            variant="contained"
             color="error"
             size="small"
             onClick={onClick}
@@ -106,6 +106,9 @@ export default function BasicTable({ data }) {
         pageSize={5}
         rowsPerPageOptions={[5]}
         disableSelectionOnClick
+        sx={{
+          backgroundColor: "rgb(46, 46, 46, 0.80)",
+        }}
       />
       <Dialog open={openEdit} onClose={handleCloseEdit}>
         <DialogTitle>Chỉnh sửa</DialogTitle>
@@ -131,8 +134,8 @@ export default function BasicTable({ data }) {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseEdit}>Hủy</Button>
-          <Button onClick={handleCloseEdit}>Lưu</Button>
+          <Button variant="contained" color="error" onClick={handleCloseEdit}>Hủy</Button>
+          <Button variant="contained" color="success" onClick={handleCloseEdit}>Lưu</Button>
         </DialogActions>
       </Dialog>
       <Dialog open={openDelete} onClose={handleCloseDelete} fullWidth>
@@ -143,12 +146,12 @@ export default function BasicTable({ data }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="error" onClick={handleCloseDelete}>
+          <Button variant="contained" color="success" onClick={handleCloseDelete}>
             Không
           </Button>
           <Button
             variant="contained"
-            color="primary"
+            color="error"
             onClick={handleCloseDelete}
           >
             Có

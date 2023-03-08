@@ -24,20 +24,24 @@ import GroupIcon from '@mui/icons-material/Group';
 import PaidIcon from '@mui/icons-material/Paid';
 import { Container } from "@mui/system";
 import { Button, ButtonGroup, createTheme, Tab, Tabs, ThemeProvider } from "@mui/material";
-import { red, orange, blue, yellow, grey } from "@mui/material/colors";
+import { red, orange, green, blue, yellow, grey } from "@mui/material/colors";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: blue["A700"],
+      main: blue["500"],
       contrastText: "#fff",
     },
     warning: {
-      main: yellow["A400"],
+      main: yellow["700"],
       contrastText: "#fff",
     },
     danger: {
       main: orange[900],
+      contrastText: "#fff",
+    },
+    success: {
+      main: green["500"],
       contrastText: "#fff",
     },
     error: {
@@ -45,7 +49,7 @@ const theme = createTheme({
       contrastText: "#fff",
     },
     action: {
-      disabledBackground: yellow[800],
+      disabledBackground: grey[800],
       disabled: "#fff",
       contrastText: "#fff",
     },
