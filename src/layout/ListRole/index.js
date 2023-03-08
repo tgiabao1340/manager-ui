@@ -114,7 +114,10 @@ export default function DataTable({ data }) {
             label="Tên cấp bậc"
             type="email"
             fullWidth
-            variant="standard"
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
             autoFocus
@@ -123,7 +126,10 @@ export default function DataTable({ data }) {
             label="Tên(không dấu)"
             type="email"
             fullWidth
-            variant="standard"
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
           <TextField
             autoFocus
@@ -132,7 +138,10 @@ export default function DataTable({ data }) {
             label="Cấp bậc ( 1 - 98 )"
             type="email"
             fullWidth
-            variant="standard"
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
 
           <TextField
@@ -142,7 +151,10 @@ export default function DataTable({ data }) {
             label="Lương 7p"
             type="email"
             fullWidth
-            variant="standard"
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         </DialogContent>
         <DialogActions>

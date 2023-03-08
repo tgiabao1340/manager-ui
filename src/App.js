@@ -16,15 +16,58 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import BasicTable from "./layout/BasicTable";
-import FundInfo from "./layout/FundInfo";
 import CardInfo from "./layout/CardInfo";
 import ListRole from "./layout/ListRole";
 import InfoIcon from '@mui/icons-material/Info';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GroupIcon from '@mui/icons-material/Group';
 import PaidIcon from '@mui/icons-material/Paid';
+import { Container } from "@mui/system";
+import { Button, ButtonGroup, createTheme, Tab, Tabs, ThemeProvider } from "@mui/material";
+import { red, orange, blue, yellow, grey } from "@mui/material/colors";
 
-const drawerWidth = 240;
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: blue["A700"],
+      contrastText: "#fff",
+    },
+    warning: {
+      main: yellow["A400"],
+      contrastText: "#fff",
+    },
+    danger: {
+      main: orange[900],
+      contrastText: "#fff",
+    },
+    error: {
+      main: red["A700"],
+      contrastText: "#fff",
+    },
+    action: {
+      disabledBackground: yellow[800],
+      disabled: "#fff",
+      contrastText: "#fff",
+    },
+    background: {
+      default: "rgb(46, 46, 46, 0.80)",
+      paper: grey["900"],
+    },
+    text: {
+      primary: "#F1F1F1",
+      secondary: "#F1F1F1",
+    },
+    contrastThreshold: 5,
+  },
+  typography: {
+    fontWeightBold: 1000,
+    fontWeightMedium: 600,
+    fontWeightRegular: 500,
+    fontWeightLight: 400,
+  },
+});
+
+const drawerWidth = 0;
 const gangInfo = {
   "total": 10,
   "name": "police",
@@ -105,146 +148,71 @@ function App(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [index, setIndex] = React.useState(0);
+  const [selected, setSelected] = React.useState(0);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const drawer = (
-    <div>
-      <Toolbar />
-      <Divider />
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => {
-              setIndex(0);
-            }}
-          >
-            <ListItemIcon>
-              <InfoIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Thông tin"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => {
-              setIndex(1);
-            }}
-          >
-            <ListItemIcon>
-              <AccountCircleIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Cấp bậc"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => {
-              setIndex(2);
-            }}
-          >
-            <ListItemIcon>
-              <GroupIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Thành viên"} />
-          </ListItemButton>
-        </ListItem>
-        <ListItem disablePadding>
-          <ListItemButton
-            onClick={() => {
-              setIndex(3);
-            }}
-          >
-            <ListItemIcon>
-              <PaidIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Ngân quỹ"} />
-          </ListItemButton>
-        </ListItem>
-      </List>
-      <Divider />
-    </div>
-  );
-
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
+  const handleClick0 = () => {
+    setSelected(0);
+  };
+
+  const handleClick1 = () => {
+    setSelected(1);
+  };
+
+  const handleClick2 = () => {
+    setSelected(2);
+  };
+
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+    <ThemeProvider theme={theme}>
+      <Container sx={{
+          position: 'absolute', left: '50%', top: '50%',
+          transform: 'translate(-50%, -50%)'
+      }}>
+        <Box sx={{ display: "flex" }}>
+          <CssBaseline />
+          <AppBar
+            position="fixed"
+            sx={{
+              width: { sm: `calc(100% - ${drawerWidth}px)` },
+              ml: { sm: `${drawerWidth}px` },
+            }}
           >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Quản lý
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
-      >
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "block" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
-          {drawer}
-        </Drawer>
-      </Box>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-      >
-        <Toolbar />
-        {index == 0 ? <CardInfo data={gangInfo}></CardInfo> : null}
-        {index == 1 ? <ListRole data={gangInfo.grades}></ListRole> : null}
-        {index == 2 ? <BasicTable data={playerList}></BasicTable> : null}
-        {index == 3 ? <FundInfo></FundInfo> : null}
-      </Box>
-    </Box>
+            <Box sx={{ flexGrow: 1 }}>
+              <ButtonGroup variant="contained">
+                <Button onClick={handleClick0} disabled={selected === 0}>
+                  Thông tin
+                </Button>
+                <Button onClick={handleClick1} disabled={selected === 1}>
+                  Cấp bậc
+                </Button>
+                <Button onClick={handleClick2} disabled={selected === 2}>
+                  Thành viên
+                </Button>
+              </ButtonGroup>
+            </Box>
+            <Toolbar>
+              <Typography variant="h6" noWrap component="div">
+                Quản lý
+              </Typography>
+            </Toolbar>
+              
+          </AppBar>
+          <Box sx={{ width: 1 }} pt={12}>
+            {selected === 0 ? <CardInfo data={gangInfo}></CardInfo> : null}
+            {selected === 1 ? <ListRole data={gangInfo.grades}></ListRole> : null}
+            {selected === 2 ? <BasicTable data={playerList}></BasicTable> : null}
+          </Box>
+          
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 }
 
