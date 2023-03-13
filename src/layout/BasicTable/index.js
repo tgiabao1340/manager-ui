@@ -27,7 +27,7 @@ export default function BasicTable({ data, grades }) {
   const columns = [
     {
       field: "identifier",
-      headerName: "steamId",
+      headerName: "SteamID",
       width: 250,
       disableColumnMenu: true,
     },
@@ -46,7 +46,7 @@ export default function BasicTable({ data, grades }) {
       valueFormatter: (params) => params.value?.grade_label,
     },
     {
-      field: "actionEdit",
+      field: "Edit",
       headerName: "",
       sortable: false,
       disableClickEventBubbling: true,
@@ -73,7 +73,7 @@ export default function BasicTable({ data, grades }) {
       },
     },
     {
-      field: "actionDelete",
+      field: "Delete",
       headerName: "",
       sortable: false,
       disableClickEventBubbling: true,
@@ -187,12 +187,12 @@ export default function BasicTable({ data, grades }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="success" onClick={handleCloseDelete}>
+          <Button variant="contained" color="error" onClick={handleCloseDelete}>
             Không
           </Button>
           <Button
             variant="contained"
-            color="error"
+            color="success"
             onClick={handleKickPlayerRequest}
           >
             Có

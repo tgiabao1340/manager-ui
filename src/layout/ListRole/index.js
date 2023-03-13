@@ -42,7 +42,7 @@ export default function DataTable({ data }) {
       disableColumnMenu: true,
     },
     {
-      field: "actionEdit",
+      field: "Edit",
       headerName: "",
       sortable: false,
       disableClickEventBubbling: true,
@@ -68,7 +68,7 @@ export default function DataTable({ data }) {
       },
     },
     {
-      field: "actionDelete",
+      field: "Delete",
       headerName: "",
       sortable: false,
       disableClickEventBubbling: true,
@@ -247,12 +247,12 @@ export default function DataTable({ data }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="success" onClick={handleCloseDelete}>
+          <Button variant="contained" color="error" onClick={handleCloseDelete}>
             Không
           </Button>
           <Button
             variant="contained"
-            color="error"
+            color="success"
             onClick={handleDeleteRequest}
           >Có
           </Button>
