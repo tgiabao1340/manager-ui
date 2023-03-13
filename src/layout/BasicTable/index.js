@@ -9,16 +9,53 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
+  OutlinedInput,
 } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { useTheme } from '@mui/material/styles';
 
-export default function BasicTable({ data }) {
+export default function BasicTable({ data, grades }) {
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [player, setPlayer] = React.useState(null);
+  const [grade, setGrade] = React.useState("");
+  var gradesTable = grades
+
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+  const theme = useTheme();
+  const [personName, setPersonName] = React.useState([]);
+
+  function getStyles(name, personName, theme) {
+    return {
+      fontWeight:
+        personName.indexOf(name) === -1
+          ? theme.typography.fontWeightRegular
+          : theme.typography.fontWeightMedium,
+    };
+  }
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
   const columns = [
     {
       field: "identifier",
@@ -97,6 +134,18 @@ export default function BasicTable({ data }) {
   const handleCloseDelete = () => {
     setOpenDelete(false);
   };
+  const names = [
+    'Oliver Hansen',
+    'Van Henry',
+    'April Tucker',
+    'Ralph Hubbard',
+    'Omar Alexander',
+    'Carlos Abbott',
+    'Miriam Wagner',
+    'Bradley Wilkerson',
+    'Virginia Andrews',
+    'Kelly Snyder',
+  ];
   return (
     <div style={{ height: 400, width: "100%" }}>
       <DataGrid
@@ -113,23 +162,31 @@ export default function BasicTable({ data }) {
       <Dialog open={openEdit} onClose={handleCloseEdit}>
         <DialogTitle>Chỉnh sửa</DialogTitle>
         <DialogContent>
-          <Box>{player?.name}</Box>
-          <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-            <InputLabel id="demo-simple-select-standard-label">
-              Cấp bậc
-            </InputLabel>
+          <TextField
+            margin="dense"
+            id="name"
+            label="Tên"
+            type="text"
+            fullWidth
+            variant="outlined"
+            InputLabelProps={{
+              shrink: true,
+            }}
+            value = {player?.name}
+          />
+          <FormControl variant="outlined" fullWidth>
             <Select
-              labelId="demo-simple-select-standard-label"
-              id="demo-simple-select-standard"
-              onChange={() => {}}
-              label="Age"
+              labelId="demo-multiple-name-label"
+              id="demo-multiple-name"
+              value={grade}
+              onChange={handleChange}
+              input={<OutlinedInput label="Name" />}
+              MenuProps={MenuProps}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              {names.map((data) =>{
+                {console.log(data)}
+                <MenuItem key={data} value={20}>{data}</MenuItem>
+              })}
             </Select>
           </FormControl>
         </DialogContent>

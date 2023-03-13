@@ -8,11 +8,21 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
+  Checkbox,
+  FormGroup,
+  FormControlLabel,
 } from "@mui/material";
 
 export default function DataTable({ data }) {
   const columns = [
-    { field: "id", headerName: "ID", width: 130, disableColumnMenu: true },
+    // { field: "id", headerName: "ID", width: 130, disableColumnMenu: true },
+    {
+      field: "grade",
+      headerName: "Cấp",
+      width: 130,
+      minWidth: 50,
+      disableColumnMenu: true,
+    },
     {
       field: "label",
       headerName: "Tên cấp bậc",
@@ -20,10 +30,15 @@ export default function DataTable({ data }) {
       disableColumnMenu: true,
     },
     {
-      field: "grade",
-      headerName: "Cấp",
-      width: 130,
-      minWidth: 50,
+      field: "name",
+      headerName: "Tên viết tắt",
+      minWidth: 100,
+      disableColumnMenu: true,
+    },
+    {
+      field: "salary",
+      headerName: "Lương 7 phút",
+      minWidth: 120,
       disableColumnMenu: true,
     },
     {
@@ -36,6 +51,7 @@ export default function DataTable({ data }) {
         const onClick = (e) => {
           const currentRow = params.row;
           setOpenEdit(true);
+          setRoleData(currentRow)
           return;
         };
 
@@ -46,7 +62,7 @@ export default function DataTable({ data }) {
             size="small"
             onClick={onClick}
           >
-            Edit
+            Sửa
           </Button>
         );
       },
@@ -61,6 +77,7 @@ export default function DataTable({ data }) {
         const onClick = (e) => {
           const currentRow = params.row;
           setOpenDelete(true);
+          setRoleData(currentRow);
         };
 
         return (
@@ -70,7 +87,7 @@ export default function DataTable({ data }) {
             size="small"
             onClick={onClick}
           >
-            Delete
+            Xóa
           </Button>
         );
       },
@@ -78,15 +95,25 @@ export default function DataTable({ data }) {
   ];
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
+  const [roleData, setRoleData] = React.useState({
+    name: "",
+    label: "",
+    grade: 0,
+    salary: 0,
+    kick: 0,
+    invite: 0,
+    manage: 0,
+    society: "",
+  });
   const rows = [];
   for (const key in data) {
     if (Object.hasOwnProperty.call(data, key)) {
-      let item = {
-        id: data[key]["id"],
-        label: data[key]["label"],
-        grade: data[key]["grade"],
-      };
-      rows.push(item);
+      // let item = {
+      //   id: data[key]["id"],
+      //   label: data[key]["label"],
+      //   grade: data[key]["grade"],
+      // };
+      rows.push(data[key]);
     }
   }
   const handleCloseEdit = () => {
@@ -95,6 +122,39 @@ export default function DataTable({ data }) {
   const handleCloseDelete = () => {
     setOpenDelete(false);
   };
+
+  const handleEditRequest = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: roleData.name,
+        label: roleData.label,
+        grade: roleData.grade,
+        salary: roleData.salary,
+        kick:roleData.kick,
+        invite:roleData.invite,
+        manage:roleData.manage,
+        society:roleData.job_name,
+      }),
+    };
+    fetch("http://esx_society/editrank", requestOptions);
+    handleCloseEdit();
+  };
+
+  const handleDeleteRequest = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        grade: roleData.grade,
+        society:roleData.job_name,
+      }),
+    };
+    fetch("http://esx_society/deleterank", requestOptions);
+    handleCloseDelete();
+  };
+
   return (
     <div style={{ height: 400, width: "100%" }}>
       <DataGrid
@@ -113,7 +173,7 @@ export default function DataTable({ data }) {
           <TextField
             autoFocus
             margin="dense"
-            id="name"
+            id="label"
             label="Tên cấp bậc"
             type="text"
             fullWidth
@@ -121,48 +181,62 @@ export default function DataTable({ data }) {
             InputLabelProps={{
               shrink: true,
             }}
-          />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Tên(không dấu)"
-            type="text"
-            fullWidth
-            variant="outlined"
-            InputLabelProps={{
-              shrink: true,
+            value = {roleData.label}
+            onChange={(event) => {
+              setRoleData({ ...roleData, label: event.target.value });
+              console.log(roleData)
             }}
           />
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Cấp bậc ( 1 - 98 )"
+            label="Tên tắt (không dấu)"
             type="text"
             fullWidth
             variant="outlined"
             InputLabelProps={{
               shrink: true,
+            }}
+            value = {roleData.name}
+            onChange={(event) => {
+              setRoleData({ ...roleData, name: event.target.value });
             }}
           />
 
           <TextField
             autoFocus
             margin="dense"
-            id="name"
-            label="Lương 7p"
+            id="salary"
+            label="Lương 7 phút"
             type="number"
             fullWidth
             variant="outlined"
             InputLabelProps={{
               shrink: true,
             }}
+            min={0}
+            max={1000000}
+            value = {roleData.salary}
+            onChange={(event) => {
+              setRoleData({ ...roleData, salary: event.target.value });
+            }}
           />
+          <FormGroup>
+            <FormControlLabel control={<Checkbox checked = {roleData.invite} onChange={(event) => {
+              setRoleData({ ...roleData, invite: event.target.checked });
+            }} />} label="Quyền mời" />
+            <FormControlLabel control={<Checkbox checked = {roleData.kick} onChange={(event) => {
+              setRoleData({ ...roleData, kick: event.target.checked });
+            }}/>} label="Quyền kick" />
+            <FormControlLabel control={<Checkbox checked = {roleData.manage} onChange={(event) => {
+              setRoleData({ ...roleData, manage: event.target.checked });
+            }}/>} label="Quyền quản lý" />
+          </FormGroup>
         </DialogContent>
         <DialogActions>
           <Button variant="contained" color="error" onClick={handleCloseEdit}>Hủy</Button>
-          <Button variant="contained" color="success" onClick={handleCloseEdit}>Lưu</Button>
+          <Button variant="contained" color="success" onClick={handleEditRequest} >Lưu</Button>
         </DialogActions>
       </Dialog>
       <Dialog open={openDelete} onClose={handleCloseDelete} fullWidth>
@@ -179,9 +253,8 @@ export default function DataTable({ data }) {
           <Button
             variant="contained"
             color="error"
-            onClick={handleCloseDelete}
-          >
-            Có
+            onClick={handleDeleteRequest}
+          >Có
           </Button>
         </DialogActions>
       </Dialog>

@@ -211,7 +211,7 @@ function App(props) {
           <Box sx={{ width: 1 }} pt={12}>
             {selected === 0 ? <CardInfo data={gangInfo}></CardInfo> : null}
             {selected === 1 ? <ListRole data={gangInfo.grades}></ListRole> : null}
-            {selected === 2 ? <BasicTable data={playerList}></BasicTable> : null}
+            {selected === 2 ? <BasicTable data={playerList} grades={gangInfo.grades}></BasicTable> : null}
           </Box>
           
         </Box>

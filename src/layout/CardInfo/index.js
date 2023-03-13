@@ -16,11 +16,12 @@ export default function CardInfo({data}) {
 
   // Use state to store the input values
   const [input1, setInput1] = React.useState(0);
-  const [input2, setInput2] = React.useState(0);
+  const [dw, setDW] = React.useState(false);
 
   // Handle the dialog open event
-  const handleOpen = () => {
+  const handleOpen = (tempDW) => {
     setOpen(true);
+    setDW(tempDW)
   };
 
   // Handle the dialog close event
@@ -36,8 +37,6 @@ export default function CardInfo({data}) {
     // Set the corresponding state based on the name
     if (name === "input1") {
       setInput1(value);
-    } else if (name === "input2") {
-      setInput2(value);
     }
   };
 
@@ -47,7 +46,7 @@ export default function CardInfo({data}) {
     event.preventDefault();
 
     // Do something with the input values
-    console.log(input1, input2);
+    console.log(input1, dw);
 
     // Close the dialog
     handleClose();
@@ -77,10 +76,10 @@ export default function CardInfo({data}) {
           Hiện có: 1000000000$
         </Typography>
         <Stack direction="row" spacing={1} pt={1}>
-          <Button variant="contained" color="primary" onClick={handleOpen}>
+          <Button variant="contained" color="success" onClick={() => handleOpen(false)}>
             Gửi
           </Button>
-          <Button variant="contained" color="warning" onClick={handleOpen}>
+          <Button variant="contained" color="warning" onClick={() => handleOpen(true)}>
             Rút
           </Button>
         </Stack>
@@ -94,15 +93,15 @@ export default function CardInfo({data}) {
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
                 Tiền trong túi của bạn: 1,000$
               </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Số tiền bạn muốn gửi/rút:
-              </Typography>
               <TextField
-                name="input1"
+                autoFocus
+                margin="dense"
+                label="Số tiền bạn muốn gửi/rút"
                 type="number"
-                label="Input 1"
                 value={input1}
+                name="input1"
                 onChange={handleChange}
+                fullWidth
               />
             </DialogContent>
             <DialogActions>
