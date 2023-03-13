@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import BasicTable from "./layout/BasicTable";
+import ListPlayer from "./layout/ListPlayer";
 import CardInfo from "./layout/CardInfo";
 import ListRole from "./layout/ListRole";
 import { Container } from "@mui/system";
@@ -175,7 +175,7 @@ function App(props) {
           <Box sx={{ width: 1 }} pt={12}>
             {selected === 0 ? <CardInfo data={gangInfo}></CardInfo> : null}
             {selected === 1 ? <ListRole data={gangInfo.grades}></ListRole> : null}
-            {selected === 2 ? <BasicTable data={playerList} grades={gangInfo.grades}></BasicTable> : null}
+            {selected === 2 ? <ListPlayer data={playerList} grades={gangInfo.grades}></ListPlayer> : null}
           </Box>
           
         </Box>
