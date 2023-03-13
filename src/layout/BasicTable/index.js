@@ -21,40 +21,11 @@ export default function BasicTable({ data, grades }) {
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [player, setPlayer] = React.useState(null);
-  const [grade, setGrade] = React.useState("");
+  const [user, setUser] = React.useState({
+    grade: 0,
+    steamid: ""
+  });
   var gradesTable = grades
-
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250,
-      },
-    },
-  };
-  const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
-
-  function getStyles(name, personName, theme) {
-    return {
-      fontWeight:
-        personName.indexOf(name) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium,
-    };
-  }
-
-  const handleChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
 
   const columns = [
     {
@@ -134,18 +105,6 @@ export default function BasicTable({ data, grades }) {
   const handleCloseDelete = () => {
     setOpenDelete(false);
   };
-  const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-  ];
   return (
     <div style={{ height: 400, width: "100%" }}>
       <DataGrid
@@ -175,18 +134,19 @@ export default function BasicTable({ data, grades }) {
             value = {player?.name}
           />
           <FormControl variant="outlined" fullWidth>
+            <InputLabel id="demo-simple-select-standard-label">Cấp bậc</InputLabel>
             <Select
               labelId="demo-multiple-name-label"
               id="demo-multiple-name"
-              value={grade}
-              onChange={handleChange}
+              value={user.grade}
+              onChange={(event) => {setUser({...user, grade: event.target.value, steamid: player.identifier})}}
               input={<OutlinedInput label="Name" />}
-              MenuProps={MenuProps}
             >
-              {names.map((data) =>{
-                {console.log(data)}
-                <MenuItem key={data} value={20}>{data}</MenuItem>
-              })}
+              {Object.keys(gradesTable).map((value, key) => (
+                <MenuItem key={key} value={value}>
+                  {gradesTable[value].label}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </DialogContent>
