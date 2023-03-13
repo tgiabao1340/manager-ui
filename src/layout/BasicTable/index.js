@@ -21,10 +21,7 @@ export default function BasicTable({ data, grades }) {
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [player, setPlayer] = React.useState(null);
-  const [user, setUser] = React.useState({
-    grade: 0,
-    steamid: ""
-  });
+  const [grade, setGrade] = React.useState(0);
   var gradesTable = grades
 
   const columns = [
@@ -58,6 +55,7 @@ export default function BasicTable({ data, grades }) {
         const onClick = (e) => {
           const currentRow = params.row;
           setPlayer(currentRow);
+          setGrade(currentRow.job.grade);
           setOpenEdit(true);
           return;
         };
@@ -83,6 +81,8 @@ export default function BasicTable({ data, grades }) {
       renderCell: (params) => {
         const onClick = (e) => {
           const currentRow = params.row;
+          setPlayer(currentRow);
+          setGrade(currentRow.job.grade);
           setOpenDelete(true);
         };
 
@@ -105,14 +105,38 @@ export default function BasicTable({ data, grades }) {
   const handleCloseDelete = () => {
     setOpenDelete(false);
   };
+  const handleEditPlayerRequest = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cid: player.identifier,
+        grade: grade,
+      }),
+    };
+    fetch("http://esx_society/editplayer", requestOptions);
+    handleCloseEdit();
+  };
+  const handleKickPlayerRequest = () => {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        cid: player.identifier,
+        grade: grade,
+      }),
+    };
+    fetch("http://esx_society/kick", requestOptions);
+    handleCloseDelete();
+  };
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 500, width: "100%" }}>
       <DataGrid
         getRowId={(row) => row.identifier}
         rows={data}
         columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
+        pageSize={10}
+        rowsPerPageOptions={[10]}
         disableSelectionOnClick
         sx={{
           backgroundColor: "rgb(46, 46, 46, 0.80)",
@@ -138,8 +162,8 @@ export default function BasicTable({ data, grades }) {
             <Select
               labelId="demo-multiple-name-label"
               id="demo-multiple-name"
-              value={user.grade}
-              onChange={(event) => {setUser({...user, grade: event.target.value, steamid: player.identifier})}}
+              value={grade}
+              onChange={(event) => {setGrade(event.target.value)}}
               input={<OutlinedInput label="Name" />}
             >
               {Object.keys(gradesTable).map((value, key) => (
@@ -152,7 +176,7 @@ export default function BasicTable({ data, grades }) {
         </DialogContent>
         <DialogActions>
           <Button variant="contained" color="error" onClick={handleCloseEdit}>Hủy</Button>
-          <Button variant="contained" color="success" onClick={handleCloseEdit}>Lưu</Button>
+          <Button variant="contained" color="success" onClick={handleEditPlayerRequest}>Lưu</Button>
         </DialogActions>
       </Dialog>
       <Dialog open={openDelete} onClose={handleCloseDelete} fullWidth>
@@ -169,7 +193,7 @@ export default function BasicTable({ data, grades }) {
           <Button
             variant="contained"
             color="error"
-            onClick={handleCloseDelete}
+            onClick={handleKickPlayerRequest}
           >
             Có
           </Button>

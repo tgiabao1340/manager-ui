@@ -53,7 +53,9 @@ export default function CardInfo({data}) {
   };
   
   return (
-    <Card sx={{ minWidth: 275 }}>
+    <Card style={{ height: 500, width: "100%" }} sx={{
+      backgroundColor: "rgb(46, 46, 46, 0.80)",
+    }}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Thông tin

@@ -156,12 +156,12 @@ export default function DataTable({ data }) {
   };
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 500, width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5]}
+        pageSize={10}
+        rowsPerPageOptions={[10]}
         disableSelectionOnClick
         sx={{
           backgroundColor: "rgb(46, 46, 46, 0.80)",
@@ -223,13 +223,13 @@ export default function DataTable({ data }) {
             }}
           />
           <FormGroup>
-            <FormControlLabel control={<Checkbox checked = {roleData.invite} onChange={(event) => {
+            <FormControlLabel control={<Checkbox checked = {roleData.invite == 1 ? true : false} onChange={(event) => {
               setRoleData({ ...roleData, invite: event.target.checked });
             }} />} label="Quyền mời" />
-            <FormControlLabel control={<Checkbox checked = {roleData.kick} onChange={(event) => {
+            <FormControlLabel control={<Checkbox checked = {roleData.kick == 1 ? true : false} onChange={(event) => {
               setRoleData({ ...roleData, kick: event.target.checked });
             }}/>} label="Quyền kick" />
-            <FormControlLabel control={<Checkbox checked = {roleData.manage} onChange={(event) => {
+            <FormControlLabel control={<Checkbox checked = {roleData.manage == 1 ? true : false} onChange={(event) => {
               setRoleData({ ...roleData, manage: event.target.checked });
             }}/>} label="Quyền quản lý" />
           </FormGroup>
