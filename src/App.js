@@ -105,10 +105,10 @@ const dummygangInfo = {
     },
     "3": {
       "label": "Thượng sĩ",
-      "manage": 0,
-      "invite": 0,
+      "manage": 1,
+      "invite": 1,
       "skin_male": "{}",
-      "kick": 0,
+      "kick": 1,
       "name": "lieutenant",
       "skin_female": "{}",
       "job_name": "police",
@@ -134,11 +134,11 @@ const dummygangInfo = {
   "id": 10,
   "label": "Công An"
 }
-const dummyplayerList = [{"name":"Big Black Chicken","identifier":"steam:110000107c9292c","job":{"name":"police","grade_label":"Giám đốc công an","grade":99,"grade_name":"boss","label":"Công An"}},{"name":"IluvNoobs","identifier":"steam:11000010b107276","job":{"name":"police","grade_label":"Thượng sĩ","grade":3,"grade_name":"lieutenant","label":"Công An"}}]
+const dummyplayerList = [{"name":"Big Black Chicken","identifier":"steam:110000107c9292c","job":{"name":"police","grade_label":"Giám đốc công an","grade":99,"grade_name":"boss","label":"Công An"}},{"name":"IluvNoobs","identifier":"steam:11000010b107276","job":{"name":"police","grade_label":"Trung sỹ","grade":2,"grade_name":"lieutenant","label":"Công An"}}]
 
 function App(props) {
   const [selected, setSelected] = React.useState(0);
-  const [display, setDisplay] = useState(true);
+  const [display, setDisplay] = useState(false);
   const [gangInfo, setGangInfo] = useState([]);
   const [playerList, setPlayerList] = useState([]);
   const [pressedKeys, setPressedKeys] = useState([]);
@@ -259,9 +259,9 @@ function App(props) {
                 
             </AppBar>
             <Box sx={{ width: 1 }} pt={12}>
-              {selected === 0 ? <CardInfo data={gangInfo} total={total} society_money={society_money} player_money={player_money} society={gangInfo.name}></CardInfo> : null}
-              {selected === 1 ? <ListRole data={gangInfo.grades} society={gangInfo.name}></ListRole> : null}
-              {selected === 2 ? <ListPlayer data={playerList} grades={gangInfo.grades} society={gangInfo.name}></ListPlayer> : null}
+              {selected === 0 ? <CardInfo data={gangInfo} total={total} society_money={society_money} player_money={player_money} society={gangInfo.name} myrank={myrank}></CardInfo> : null}
+              {selected === 1 ? <ListRole data={gangInfo.grades} society={gangInfo.name} myrank={myrank}></ListRole> : null}
+              {selected === 2 ? <ListPlayer data={playerList} grades={gangInfo.grades} society={gangInfo.name} myrank={myrank}></ListPlayer> : null}
             </Box>
             
           </Box>

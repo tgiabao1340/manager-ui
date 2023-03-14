@@ -13,7 +13,24 @@ import {
   FormControlLabel,
 } from "@mui/material";
 
-export default function DataTable({ data, society }) {
+export default function DataTable({ data, society, myrank }) {
+
+  const canmanage = (data, myrank) => {
+    if( !data ) { return false}
+    for (const [i, grade] of Object.keys(data).entries()) {
+      if(data[grade].manage == 1 && myrank == data[grade].grade){
+        return true;
+      }
+    }
+    return false
+  }
+
+  const ishigher = (grade, myrank) => {
+    if( data[grade].grade >= myrank && myrank != 99) { return false}
+
+    return true
+  }
+
   const columns = [
     // { field: "id", headerName: "ID", width: 130, disableColumnMenu: true },
     {
@@ -41,7 +58,7 @@ export default function DataTable({ data, society }) {
       minWidth: 120,
       disableColumnMenu: true,
     },
-    {
+    canmanage(data, myrank) && {
       field: "Edit",
       headerName: "",
       sortable: false,
@@ -61,13 +78,14 @@ export default function DataTable({ data, society }) {
             color="warning"
             size="small"
             onClick={onClick}
+            disabled={!ishigher(params.row.grade, myrank)}
           >
             Sửa
           </Button>
         );
       },
     },
-    {
+    canmanage(data, myrank) && {
       field: "Delete",
       headerName: "",
       sortable: false,
@@ -86,6 +104,7 @@ export default function DataTable({ data, society }) {
             color="error"
             size="small"
             onClick={onClick}
+            disabled={!ishigher(params.row.grade, myrank)}
           >
             Xóa
           </Button>
@@ -126,6 +145,19 @@ export default function DataTable({ data, society }) {
   const handleCloseCreate = () => {
     setOpenCreate(false);
   };
+
+  const handleResetRoleData = () => {
+    setRoleData({
+      name: "",
+      label: "",
+      grade: 0,
+      salary: 0,
+      kick: 0,
+      invite: 0,
+      manage: 0,
+      society: "",
+    });
+  }
 
   const handlePostRequest = (data) =>{
     return {
@@ -176,6 +208,7 @@ export default function DataTable({ data, society }) {
     })
     fetch("http://esx_society/createrank", requestOptions).then(() => {
       fetch("http://esx_society/refresh", handlePostRequest({society: society}));
+      handleResetRoleData();
     });
     handleCloseCreate();
   };
@@ -193,12 +226,14 @@ export default function DataTable({ data, society }) {
         }}
         getRowId={(row) => row.grade}
       />
-      <Button
-        variant="contained"
-        color="success"
-        onClick={() => setOpenCreate(true)}
-      >Thêm mới
-      </Button>
+      {canmanage(data, myrank) && (
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => setOpenCreate(true)}
+        >Thêm mới
+        </Button>
+      )}
       <Dialog open={openCreate} onClose={handleCloseCreate}>
       <DialogTitle>Thêm mới</DialogTitle>
         <DialogContent>

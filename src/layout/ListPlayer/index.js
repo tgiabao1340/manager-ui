@@ -17,7 +17,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useTheme } from '@mui/material/styles';
 
-export default function BasicTable({ data, grades, society }) {
+export default function BasicTable({ data, grades, society, myrank }) {
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
   const [openInvite, setOpenInvite] = React.useState(false);
@@ -28,6 +28,42 @@ export default function BasicTable({ data, grades, society }) {
     name: '',
     id: 0,
   });
+
+  const caninvite = (data, myrank) => {
+    if( !data ) { return false}
+    for (const [i, grade] of Object.keys(data).entries()) {
+      if(data[grade].invite == 1 && myrank == data[grade].grade){
+        return true;
+      }
+    }
+    return false
+  }
+
+  const cankick = (data, myrank) => {
+    if( !data ) { return false}
+    for (const [i, grade] of Object.keys(data).entries()) {
+      if(data[grade].kick == 1 && myrank == data[grade].grade){
+        return true;
+      }
+    }
+    return false
+  }
+
+  const canmanage = (data, myrank) => {
+    if( !data ) { return false}
+    for (const [i, grade] of Object.keys(data).entries()) {
+      if(data[grade].manage == 1 && myrank == data[grade].grade){
+        return true;
+      }
+    }
+    return false
+  }
+
+  const ishigher = (grade, myrank) => {
+    if( grades[grade].grade >= myrank && myrank != 99) { return false}
+
+    return true
+  }
 
   var gradesTable = grades
 
@@ -52,7 +88,7 @@ export default function BasicTable({ data, grades, society }) {
       disableColumnMenu: true,
       valueFormatter: (params) => params.value?.grade_label,
     },
-    {
+    canmanage(grades, myrank) && {
       field: "Edit",
       headerName: "",
       sortable: false,
@@ -73,13 +109,14 @@ export default function BasicTable({ data, grades, society }) {
             color="warning"
             size="small"
             onClick={onClick}
+            disabled={!ishigher(params.row.job.grade, myrank)}
           >
             Sửa
           </Button>
         );
       },
     },
-    {
+    cankick(grades, myrank) && {
       field: "Delete",
       headerName: "",
       sortable: false,
@@ -99,6 +136,7 @@ export default function BasicTable({ data, grades, society }) {
             color="error"
             size="small"
             onClick={onClick}
+            disabled={!ishigher(params.row.job.grade, myrank)}
           >
             Đuổi
           </Button>
@@ -177,13 +215,15 @@ export default function BasicTable({ data, grades, society }) {
           backgroundColor: "rgb(46, 46, 46, 0.80)",
         }}
       />
-      <Button
-        variant="contained"
-        color="success"
-        onClick={handleInviteGet}
-      >
-        Mời
-      </Button>
+      {caninvite(grades, myrank) ? (
+        <Button
+          variant="contained"
+          color="success"
+          onClick={handleInviteGet}
+        >
+          Mời
+        </Button>
+      ) : null}
       <Dialog open={openEdit} onClose={handleCloseEdit}>
         <DialogTitle>Chỉnh sửa</DialogTitle>
         <DialogContent>

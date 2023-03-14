@@ -9,7 +9,7 @@ import { Divider, Stack } from "@mui/material";
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField } from "@mui/material";
 
 
-export default function CardInfo({data, total, society_money, player_money, society}) {
+export default function CardInfo({data, total, society_money, player_money, society, myrank}) {
   const {label, grades} = data
   // Use state to control the dialog open or close
   const [open, setOpen] = React.useState(false);
@@ -73,6 +73,16 @@ export default function CardInfo({data, total, society_money, player_money, soci
       body: JSON.stringify(data),
     };
   }
+
+  const canmanage = (data, myrank) => {
+    if( !data ) { return false}
+    for (const [i, grade] of Object.keys(data).entries()) {
+      if(data[grade].manage == 1 && myrank == data[grade].grade){
+        return true;
+      }
+    }
+    return false
+  }
   
   return (
     <Card style={{ height: 500, width: "100%" }} sx={{
@@ -83,7 +93,7 @@ export default function CardInfo({data, total, society_money, player_money, soci
           Thông tin
         </Typography>
         <Typography variant="h5" component="div">
-          Tên guild : {label}
+          Tên : {label}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
         Tổng thành viên: {total}
@@ -92,49 +102,54 @@ export default function CardInfo({data, total, society_money, player_money, soci
           Tổng cấp bậc : {grades ? Object.keys(grades).length : 0}
         </Typography>
       </CardContent>
-      <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Quản lý Ngân Quỹ
-        </Typography>
-        <Typography variant="h5" component="div">
-          Hiện có: {society_money}$
-        </Typography>
-        <Stack direction="row" spacing={1} pt={1}>
-          <Button variant="contained" color="success" onClick={() => handleOpen(false)}>
-            Gửi
-          </Button>
-          <Button variant="contained" color="warning" onClick={() => handleOpen(true)}>
-            Rút
-          </Button>
-        </Stack>
-        <Dialog open={open} onClose={handleClose}>
-          <form onSubmit={handleSubmit}>
-            <DialogTitle>Ngân quỹ</DialogTitle>
-            <DialogContent>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Ngân quỹ đang có: {society_money}$
-              </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Tiền trong túi của bạn: {player_money}$
-              </Typography>
-              <TextField
-                autoFocus
-                margin="dense"
-                label="Số tiền bạn muốn gửi/rút"
-                type="number"
-                value={input1}
-                name="input1"
-                onChange={handleChange}
-                fullWidth
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button type="submit">Submit</Button>
-            </DialogActions>
-          </form>
-        </Dialog>
-      </CardContent>
+      {canmanage(grades, myrank) ? (
+        <CardContent>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            Quản lý Ngân Quỹ
+          </Typography>
+          <Typography variant="h5" component="div">
+            Hiện có: {society_money}$
+          </Typography>
+          <Stack direction="row" spacing={1} pt={1}>
+            <Button variant="contained" color="success" onClick={() => handleOpen(false)}>
+              Gửi
+            </Button>
+            <Button variant="contained" color="warning" onClick={() => handleOpen(true)}>
+              Rút
+            </Button>
+          </Stack>
+          <Dialog open={open} onClose={handleClose}>
+            <form onSubmit={handleSubmit}>
+              <DialogTitle>Ngân quỹ</DialogTitle>
+              <DialogContent>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Ngân quỹ đang có: {society_money}$
+                </Typography>
+                <Typography sx={{ mb: 1.5 }} color="text.secondary">
+                  Tiền trong túi của bạn: {player_money}$
+                </Typography>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  label="Số tiền bạn muốn gửi/rút"
+                  type="number"
+                  value={input1}
+                  name="input1"
+                  onChange={handleChange}
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} variant="contained" color="error">Hủy</Button>
+                <Button type="submit" variant="contained" color="success">Đồng ý</Button>
+              </DialogActions>
+            </form>
+          </Dialog>
+        </CardContent>
+      ) : null}
     </Card>
   );
 }
