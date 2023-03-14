@@ -9,9 +9,11 @@ import ListPlayer from "./layout/ListPlayer";
 import CardInfo from "./layout/CardInfo";
 import ListRole from "./layout/ListRole";
 import { Container } from "@mui/system";
-import { Button, ButtonGroup, createTheme, ThemeProvider } from "@mui/material";
+import { Button, ButtonGroup, createTheme, ThemeProvider, Collapse } from "@mui/material";
 import { red, orange, green, blue, yellow, grey } from "@mui/material/colors";
+import { useCallback, useEffect, useState } from "react";
 
+const ALLOWED_KEYS = ["Escape"];
 const theme = createTheme({
   palette: {
     primary: {
@@ -58,7 +60,7 @@ const theme = createTheme({
 });
 
 const drawerWidth = 0;
-const gangInfo = {
+const dummygangInfo = {
   "total": 10,
   "name": "police",
   "grades": {
@@ -133,54 +135,140 @@ const gangInfo = {
   "label": "Công An"
 }
 const playerList = [{"name":"Big Black Chicken","identifier":"steam:110000107c9292c","job":{"name":"police","grade_label":"Giám đốc công an","grade":99,"grade_name":"boss","label":"Công An"}},{"name":"IluvNoobs","identifier":"steam:11000010b107276","job":{"name":"police","grade_label":"Thượng sĩ","grade":3,"grade_name":"lieutenant","label":"Công An"}},{"name":"SWAT | Phi","identifier":"Char1:1100001432240e1","job":{"name":"police","grade_label":"Thượng sĩ","grade":3,"grade_name":"lieutenant","label":"Công An"}},{"name":"a","identifier":"steam:11000010545a672","job":{"name":"police","grade_label":"Trung sĩ","grade":2,"grade_name":"sergeant","label":"Công An"}},{"name":"Fujin","identifier":"steam:110000134ee0f87","job":{"name":"police","grade_label":"Học việc","grade":0,"grade_name":"recruit","label":"Công An"}},{"name":"Ecion","identifier":"steam:11000010c5463be","job":{"name":"police","grade_label":"Học việc","grade":0,"grade_name":"recruit","label":"Công An"}},{"name":"Tharo","identifier":"steam:110000134ca0d80","job":{"name":"police","grade_label":"Học việc","grade":0,"grade_name":"recruit","label":"Công An"}}]
+const dummyplayerList = [{"name":"Big Black Chicken","identifier":"steam:110000107c9292c","job":{"name":"police","grade_label":"Giám đốc công an","grade":99,"grade_name":"boss","label":"Công An"}},{"name":"IluvNoobs","identifier":"steam:11000010b107276","job":{"name":"police","grade_label":"Thượng sĩ","grade":3,"grade_name":"lieutenant","label":"Công An"}}]
 
 function App(props) {
   const [selected, setSelected] = React.useState(0);
+  const [display, setDisplay] = useState(true);
+  const [gangInfo, setGangInfo] = useState([]);
+  const [playerList, setPlayerList] = useState([]);
+  const [pressedKeys, setPressedKeys] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [myrank, setMyRank] = useState(0);
+  const [society_money, setSociety_money] = useState(0);
+  const [player_money, setPlayer_money] = useState(0);
+  const handleEvent = useCallback((event) => {
+    if (event === null) {
+      return;
+    }
+    if (event.data === null) {
+      return;
+    }
+    if (event.data.type === "loadata") {
+      setGangInfo(event.data.info);
+      setPlayerList(event.data.list);
+      setTotal(event.data.total);
+      setMyRank(event.data.myrank);
+      setSociety_money(event.data.society_money);
+      setPlayer_money(event.data.player_money);
+    }
+    if (event.data.type === "toggle") {
+      menuToggle(event.data.state, false);
+    }
+  }, []);
+
+  // Debug data
+  useEffect(() => {
+    setGangInfo(dummygangInfo);
+    setPlayerList(dummyplayerList);
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = ({ key }) => {
+      if (ALLOWED_KEYS.includes(key) && !pressedKeys.includes(key)) {
+        setPressedKeys((previousPressedKeys) => [...previousPressedKeys, key]);
+      }
+    };
+
+    const onKeyUp = ({ key }) => {
+      if (ALLOWED_KEYS.includes(key)) {
+        setPressedKeys((previousPressedKeys) =>
+          previousPressedKeys.filter((k) => k !== key)
+        );
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("keyup", onKeyUp);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("keyup", onKeyUp);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("message", handleEvent);
+    return () => {
+      window.removeEventListener("message", handleEvent);
+    };
+  }, [handleEvent]);
+
+  useEffect(() => {
+    if (pressedKeys.includes("Escape")) {
+      menuToggle(false, true);
+    }
+  }, [pressedKeys]);
+
+  const menuToggle = (state, send) => {
+    setDisplay(state);
+    if (send) {
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ state: state }),
+      };
+      fetch("https://esx_society/closeui", requestOptions);
+    }
+  };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container sx={{
-          position: 'absolute', left: '50%', top: '50%',
-          transform: 'translate(-50%, -50%)'
-      }}>
-        <Box sx={{ display: "flex" }}>
-          <CssBaseline />
-          <AppBar
-            position="fixed"
-            sx={{
-              width: { sm: `calc(100% - ${drawerWidth}px)` },
-              ml: { sm: `${drawerWidth}px` },
-            }}
-          >
-            <Box sx={{ flexGrow: 1 }}>
-              <ButtonGroup variant="contained">
-                <Button onClick={() => setSelected(0)} disabled={selected === 0}>
-                  Thông tin
-                </Button>
-                <Button onClick={() => setSelected(1)} disabled={selected === 1}>
-                  Cấp bậc
-                </Button>
-                <Button onClick={() => setSelected(2)} disabled={selected === 2}>
-                  Thành viên
-                </Button>
-              </ButtonGroup>
+    <Collapse in={display} timeout={0}>
+      <ThemeProvider theme={theme}>
+        <Container sx={{
+            position: 'absolute', left: '50%', top: '50%',
+            transform: 'translate(-50%, -50%)'
+        }}>
+          <Box sx={{ display: "flex" }}>
+            <CssBaseline />
+            <AppBar
+              position="fixed"
+              sx={{
+                width: { sm: `calc(100% - ${drawerWidth}px)` },
+                ml: { sm: `${drawerWidth}px` },
+              }}
+            >
+              <Box sx={{ flexGrow: 1 }}>
+                <ButtonGroup variant="contained">
+                  <Button onClick={() => setSelected(0)} disabled={selected === 0}>
+                    Thông tin
+                  </Button>
+                  <Button onClick={() => setSelected(1)} disabled={selected === 1}>
+                    Cấp bậc
+                  </Button>
+                  <Button onClick={() => setSelected(2)} disabled={selected === 2}>
+                    Thành viên
+                  </Button>
+                </ButtonGroup>
+              </Box>
+              <Toolbar>
+                <Typography variant="h6" noWrap component="div">
+                  Quản lý
+                </Typography>
+              </Toolbar>
+                
+            </AppBar>
+            <Box sx={{ width: 1 }} pt={12}>
+              {selected === 0 ? <CardInfo data={gangInfo} total={total} society_money={society_money} player_money={player_money} society={gangInfo.name}></CardInfo> : null}
+              {selected === 1 ? <ListRole data={gangInfo.grades} society={gangInfo.name}></ListRole> : null}
+              {selected === 2 ? <ListPlayer data={playerList} grades={gangInfo.grades} society={gangInfo.name}></ListPlayer> : null}
             </Box>
-            <Toolbar>
-              <Typography variant="h6" noWrap component="div">
-                Quản lý
-              </Typography>
-            </Toolbar>
-              
-          </AppBar>
-          <Box sx={{ width: 1 }} pt={12}>
-            {selected === 0 ? <CardInfo data={gangInfo}></CardInfo> : null}
-            {selected === 1 ? <ListRole data={gangInfo.grades}></ListRole> : null}
-            {selected === 2 ? <ListPlayer data={playerList} grades={gangInfo.grades}></ListPlayer> : null}
+            
           </Box>
-          
-        </Box>
-      </Container>
-    </ThemeProvider>
+        </Container>
+      </ThemeProvider>
+    </Collapse>
   );
 }
 

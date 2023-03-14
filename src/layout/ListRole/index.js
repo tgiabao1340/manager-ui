@@ -13,7 +13,7 @@ import {
   FormControlLabel,
 } from "@mui/material";
 
-export default function DataTable({ data }) {
+export default function DataTable({ data, society }) {
   const columns = [
     // { field: "id", headerName: "ID", width: 130, disableColumnMenu: true },
     {
@@ -127,55 +127,57 @@ export default function DataTable({ data }) {
     setOpenCreate(false);
   };
 
-  const handleEditRequest = () => {
-    const requestOptions = {
+  const handlePostRequest = (data) =>{
+    return {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+      body: JSON.stringify(data),
+    };
+  }
+
+  const handleEditRequest = () => {
+    const requestOptions = handlePostRequest({
         name: roleData.name,
         label: roleData.label,
         grade: roleData.grade,
         salary: roleData.salary,
-        kick:roleData.kick,
-        invite:roleData.invite,
-        manage:roleData.manage,
-        society:roleData.job_name,
-      }),
-    };
-    fetch("http://esx_society/editrank", requestOptions);
+        kick:roleData.kick ? 1 : 0,
+        invite:roleData.invite ? 1 : 0,
+        manage:roleData.manage ? 1 : 0,
+        society: society,
+    })
+    fetch("http://esx_society/editrank", requestOptions).then(() => {
+      fetch("http://esx_society/refresh", handlePostRequest({society: society}));
+    });
     handleCloseEdit();
   };
 
   const handleDeleteRequest = () => {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    const requestOptions = handlePostRequest({
         grade: roleData.grade,
-        society:roleData.job_name,
-      }),
-    };
-    fetch("http://esx_society/deleterank", requestOptions);
+        society: society,
+    })
+    fetch("http://esx_society/deleterank", requestOptions).then(() => {
+      fetch("http://esx_society/refresh", handlePostRequest({society: society}));
+    });
     handleCloseDelete();
   };
 
   const handleCreateRequest = () => {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    const requestOptions = handlePostRequest({
         name: roleData.name,
         label: roleData.label,
         grade: roleData.grade,
         salary: roleData.salary,
-        kick:roleData.kick,
-        invite:roleData.invite,
-        manage:roleData.manage,
-        society:roleData.job_name,
-      }),
-    };
-    fetch("http://esx_society/createrank", requestOptions);
-    handleCloseEdit();
+        kick:roleData.kick ? 1 : 0,
+        invite:roleData.invite ? 1 : 0,
+        manage:roleData.manage ? 1 : 0,
+        society: society,
+    })
+    fetch("http://esx_society/createrank", requestOptions).then(() => {
+      fetch("http://esx_society/refresh", handlePostRequest({society: society}));
+    });
+    handleCloseCreate();
   };
 
   return (
@@ -189,6 +191,7 @@ export default function DataTable({ data }) {
         sx={{
           backgroundColor: "rgb(46, 46, 46, 0.80)",
         }}
+        getRowId={(row) => row.grade}
       />
       <Button
         variant="contained"

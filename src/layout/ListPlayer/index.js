@@ -17,11 +17,18 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { useTheme } from '@mui/material/styles';
 
-export default function BasicTable({ data, grades }) {
+export default function BasicTable({ data, grades, society }) {
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openDelete, setOpenDelete] = React.useState(false);
+  const [openInvite, setOpenInvite] = React.useState(false);
   const [player, setPlayer] = React.useState(null);
   const [grade, setGrade] = React.useState(0);
+  const [nearestPlayer, setNearestPlayer] = React.useState({
+    ped: -1,
+    name: '',
+    id: 0,
+  });
+
   var gradesTable = grades
 
   const columns = [
@@ -105,30 +112,57 @@ export default function BasicTable({ data, grades }) {
   const handleCloseDelete = () => {
     setOpenDelete(false);
   };
+  const handleCloseInvite = () => {
+    setOpenInvite(false);
+  };
   const handleEditPlayerRequest = () => {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    const requestOptions = handlePostRequest({
         cid: player.identifier,
         grade: grade,
-      }),
-    };
-    fetch("http://esx_society/editplayer", requestOptions);
+        society: society
+    })
+    fetch("http://esx_society/editplayer", requestOptions).then(() => {
+      fetch("http://esx_society/refresh", handlePostRequest({society: society}));
+    });
     handleCloseEdit();
   };
   const handleKickPlayerRequest = () => {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    const requestOptions = handlePostRequest({
         cid: player.identifier,
         grade: grade,
-      }),
-    };
-    fetch("http://esx_society/kick", requestOptions);
+        society: society
+    })
+    fetch("http://esx_society/kick", requestOptions).then(() => {
+      fetch("http://esx_society/refresh", handlePostRequest({society: society}));
+    });
     handleCloseDelete();
   };
+  const handleInviteGet = () => {
+    fetch("http://esx_society/getclosestplayer", handlePostRequest({})).then(() => {
+      if(data.ped != -1){
+        setNearestPlayer({...nearestPlayer, ped: data.ped, id: data.id, name: data.name});
+        setOpenInvite(true);
+      }
+    });
+  };
+  const handleInviteRequest = () => {
+    const requestOptions = handlePostRequest({
+        ped: nearestPlayer.ped,
+        name: nearestPlayer.name,
+        id: nearestPlayer.id,
+        society: society
+    })
+    fetch("http://esx_society/invite", requestOptions);
+    handleCloseInvite();
+  };
+
+  const handlePostRequest = (data) =>{
+    return {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    };
+  }
   return (
     <div style={{ height: 500, width: "100%" }}>
       <DataGrid
@@ -142,6 +176,13 @@ export default function BasicTable({ data, grades }) {
           backgroundColor: "rgb(46, 46, 46, 0.80)",
         }}
       />
+      <Button
+        variant="contained"
+        color="success"
+        onClick={handleInviteGet}
+      >
+        Mời
+      </Button>
       <Dialog open={openEdit} onClose={handleCloseEdit}>
         <DialogTitle>Chỉnh sửa</DialogTitle>
         <DialogContent>
@@ -194,6 +235,26 @@ export default function BasicTable({ data, grades }) {
             variant="contained"
             color="success"
             onClick={handleKickPlayerRequest}
+          >
+            Có
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={openInvite} onClose={handleCloseInvite} fullWidth>
+        <DialogTitle>Xác nhận</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            Bạn có muốn mời {nearestPlayer.name} ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" color="error" onClick={handleCloseInvite}>
+            Không
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleInviteRequest}
           >
             Có
           </Button>
