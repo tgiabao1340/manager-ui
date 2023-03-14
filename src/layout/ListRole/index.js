@@ -1,5 +1,5 @@
 import * as React from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridPagination } from "@mui/x-data-grid";
 import {
   Button,
   Dialog,
@@ -145,6 +145,10 @@ export default function DataTable({ data, society, myrank }) {
   const handleCloseCreate = () => {
     setOpenCreate(false);
   };
+  const handleOpenCreate = () => {
+    handleResetRoleData();
+    setOpenCreate(true);
+  };
 
   const handleResetRoleData = () => {
     setRoleData({
@@ -213,6 +217,26 @@ export default function DataTable({ data, society, myrank }) {
     handleCloseCreate();
   };
 
+  function CustomFooter() {
+    return (
+      <div style={{ display: "flex", justifyContent:"space-between", alignItems:"center" }}>
+        <div>
+          {canmanage(data, myrank) && (
+            <Button
+              variant="contained"
+              color="success"
+              onClick={handleOpenCreate}
+            >Thêm mới
+            </Button>
+          )}
+        </div>
+        <div>
+          <GridPagination />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ height: 500, width: "100%" }}>
       <DataGrid
@@ -225,15 +249,10 @@ export default function DataTable({ data, society, myrank }) {
           backgroundColor: "rgb(46, 46, 46, 0.80)",
         }}
         getRowId={(row) => row.grade}
+        components={{
+          Footer: CustomFooter,
+        }}
       />
-      {canmanage(data, myrank) && (
-        <Button
-          variant="contained"
-          color="success"
-          onClick={() => setOpenCreate(true)}
-        >Thêm mới
-        </Button>
-      )}
       <Dialog open={openCreate} onClose={handleCloseCreate}>
       <DialogTitle>Thêm mới</DialogTitle>
         <DialogContent>
@@ -253,7 +272,6 @@ export default function DataTable({ data, society, myrank }) {
             }}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="name"
             label="Tên viết tắt (không dấu)"
@@ -269,7 +287,6 @@ export default function DataTable({ data, society, myrank }) {
           />
 
           <TextField
-            autoFocus
             margin="dense"
             id="grade"
             label="Cấp bậc"
@@ -287,7 +304,6 @@ export default function DataTable({ data, society, myrank }) {
           />
 
           <TextField
-            autoFocus
             margin="dense"
             id="salary"
             label="Lương 7 phút"
@@ -340,7 +356,6 @@ export default function DataTable({ data, society, myrank }) {
             }}
           />
           <TextField
-            autoFocus
             margin="dense"
             id="name"
             label="Tên viết tắt (không dấu)"
@@ -357,7 +372,6 @@ export default function DataTable({ data, society, myrank }) {
           />
 
           <TextField
-            autoFocus
             margin="dense"
             id="salary"
             label="Lương 7 phút"

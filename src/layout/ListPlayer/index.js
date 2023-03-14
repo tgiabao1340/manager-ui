@@ -1,5 +1,5 @@
 import * as React from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid , GridPagination} from "@mui/x-data-grid";
 import {
   Box,
   Button,
@@ -10,6 +10,7 @@ import {
   DialogTitle,
   TextField,
   OutlinedInput,
+  Pagination,
 } from "@mui/material";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -202,6 +203,27 @@ export default function BasicTable({ data, grades, society, myrank }) {
       body: JSON.stringify(data),
     };
   }
+
+  function CustomFooter() {
+    return (
+      <div style={{ display: "flex", justifyContent:"space-between", alignItems:"center" }}>
+        <div>
+          {caninvite(grades, myrank) && (
+            <Button
+              variant="contained"
+              color="success"
+              onClick={handleInviteGet}
+              fullWidth
+            >
+              Mời người gần nhất
+            </Button>
+          )}
+        </div>
+        <GridPagination />
+      </div>
+    );
+  }
+
   return (
     <div style={{ height: 500, width: "100%" }}>
       <DataGrid
@@ -214,16 +236,10 @@ export default function BasicTable({ data, grades, society, myrank }) {
         sx={{
           backgroundColor: "rgb(46, 46, 46, 0.80)",
         }}
+        components={{
+          Footer : CustomFooter,
+        }}
       />
-      {caninvite(grades, myrank) ? (
-        <Button
-          variant="contained"
-          color="success"
-          onClick={handleInviteGet}
-        >
-          Mời
-        </Button>
-      ) : null}
       <Dialog open={openEdit} onClose={handleCloseEdit}>
         <DialogTitle>Chỉnh sửa</DialogTitle>
         <DialogContent>
