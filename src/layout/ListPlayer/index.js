@@ -137,13 +137,12 @@ export default function BasicTable({ data, grades, society }) {
     });
     handleCloseDelete();
   };
-  const handleInviteGet = () => {
-    fetch("http://esx_society/getclosestplayer", handlePostRequest({})).then(() => {
-      if(data.ped != -1){
-        setNearestPlayer({...nearestPlayer, ped: data.ped, id: data.id, name: data.name});
-        setOpenInvite(true);
-      }
-    });
+  const handleInviteGet = async () => {
+    const response = await fetch("http://esx_society/getclosestplayer", handlePostRequest({})).then((cb) => cb.json());
+    if(response.ped != -1){
+      setNearestPlayer({...nearestPlayer, ped: response.ped, id: response.id, name: response.name});
+      setOpenInvite(true);
+    }
   };
   const handleInviteRequest = () => {
     const requestOptions = handlePostRequest({
@@ -152,7 +151,9 @@ export default function BasicTable({ data, grades, society }) {
         id: nearestPlayer.id,
         society: society
     })
-    fetch("http://esx_society/invite", requestOptions);
+    fetch("http://esx_society/invite", requestOptions).then(() => {
+      fetch("http://esx_society/refresh", handlePostRequest({society: society}));
+    });
     handleCloseInvite();
   };
 
