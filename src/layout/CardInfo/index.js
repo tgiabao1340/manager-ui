@@ -83,7 +83,6 @@ export default function CardInfo({data, total, society_money, player_money, soci
     }
     return false
   }
-  
   return (
     <Card style={{ height: 500, width: "100%" }} sx={{
       backgroundColor: "rgb(46, 46, 46, 0.80)",
@@ -108,7 +107,7 @@ export default function CardInfo({data, total, society_money, player_money, soci
             Quản lý Ngân Quỹ
           </Typography>
           <Typography variant="h5" component="div">
-            Hiện có: {society_money}$
+            Hiện có: {society_money.toLocaleString("en-US")}$
           </Typography>
           <Stack direction="row" spacing={1} pt={1}>
             <Button variant="contained" color="success" onClick={() => handleOpen(false)}>
@@ -123,10 +122,10 @@ export default function CardInfo({data, total, society_money, player_money, soci
               <DialogTitle>Ngân quỹ</DialogTitle>
               <DialogContent>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Ngân quỹ đang có: {society_money}$
+                  Ngân quỹ đang có: {society_money.toLocaleString("en-US")}$
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Tiền trong túi của bạn: {player_money}$
+                  Tiền trong túi của bạn: {player_money.toLocaleString("en-US")}$
                 </Typography>
                 <TextField
                   autoFocus
