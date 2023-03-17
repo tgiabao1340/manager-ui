@@ -101,7 +101,7 @@ export default function CardInfo({data, total, society_money, player_money, soci
           Tổng cấp bậc : {grades ? Object.keys(grades).length : 0}
         </Typography>
       </CardContent>
-      {canmanage(grades, myrank) ? (
+      {myrank == 99 && (
         <CardContent>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             Quản lý Ngân Quỹ
@@ -148,7 +148,7 @@ export default function CardInfo({data, total, society_money, player_money, soci
             </form>
           </Dialog>
         </CardContent>
-      ) : null}
+      )}
     </Card>
   );
 }

@@ -229,42 +229,41 @@ function App(props) {
             position: 'absolute', left: '50%', top: '50%',
             transform: 'translate(-50%, -50%)'
         }}>
-          <Box sx={{ display: "flex" }}>
-            <CssBaseline />
-            <AppBar
-              position="fixed"
-              sx={{
-                width: { sm: `calc(100% - ${drawerWidth}px)` },
-                ml: { sm: `${drawerWidth}px` },
-              }}
-            >
-              <Box sx={{ flexGrow: 1 }}>
-                <ButtonGroup variant="contained">
-                  <Button onClick={() => setSelected(0)} disabled={selected === 0}>
-                    Thông tin
-                  </Button>
-                  <Button onClick={() => setSelected(1)} disabled={selected === 1}>
-                    Cấp bậc
-                  </Button>
-                  <Button onClick={() => setSelected(2)} disabled={selected === 2}>
-                    Thành viên
-                  </Button>
-                </ButtonGroup>
-              </Box>
-              <Toolbar>
-                <Typography variant="h6" noWrap component="div">
-                  Quản lý
-                </Typography>
-              </Toolbar>
-                
-            </AppBar>
-            <Box sx={{ width: 1 }} pt={12}>
-              {selected === 0 ? <CardInfo data={gangInfo} total={total} society_money={society_money} player_money={player_money} society={gangInfo.name} myrank={myrank}></CardInfo> : null}
-              {selected === 1 ? <ListRole data={gangInfo.grades} society={gangInfo.name} myrank={myrank}></ListRole> : null}
-              {selected === 2 ? <ListPlayer data={playerList} grades={gangInfo.grades} society={gangInfo.name} myrank={myrank}></ListPlayer> : null}
+          <Box sx={{ display: "flex" }} mt={2}>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
+      >
+        <Box sx={{ display: "flex" }}>
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 12 }}>
+              Quản lý
+            </Typography>
+            <Box sx={{ alignItems: 'flex-end' }}>
+              <ButtonGroup variant="contained">
+                <Button onClick={() => setSelected(0)} disabled={selected === 0}>
+                  Thông tin
+                </Button>
+                <Button onClick={() => setSelected(1)} disabled={selected === 1}>
+                  Cấp bậc
+                </Button>
+                <Button onClick={() => setSelected(2)} disabled={selected === 2}>
+                  Thành viên
+                </Button>
+              </ButtonGroup>
             </Box>
-            
-          </Box>
+          </Toolbar>
+        </AppBar>
+          
+        </Box>
+        <Box sx={{ width: 1 }} pt={1}>
+          {selected === 0 ? <CardInfo data={gangInfo} total={total} society_money={society_money} player_money={player_money} society={gangInfo.name} myrank={myrank}></CardInfo> : null}
+          {selected === 1 ? <ListRole data={gangInfo.grades} society={gangInfo.name} myrank={myrank}></ListRole> : null}
+          {selected === 2 ? <ListPlayer data={playerList} grades={gangInfo.grades} society={gangInfo.name} myrank={myrank}></ListPlayer> : null}
+        </Box>
+      </Box>
+    </Box>
         </Container>
       </ThemeProvider>
     </Collapse>
